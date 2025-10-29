@@ -1,4 +1,15 @@
 # install-gamemaker
+![GameMaker Beta Installer Banner](https://img.shields.io/badge/GameMaker_Beta-Linux_Installer-black?logo=linux&logoColor=white&style=for-the-badge)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-Linux-blue.svg)](#)
+[![Language](https://img.shields.io/badge/language-Bash-orange.svg)](#)
+[![Status](https://img.shields.io/badge/status-Beta-yellow.svg)](#)
+[![GameMaker](https://img.shields.io/badge/GameMaker-Beta-red.svg)](https://gamemaker.io/fr/download)
+
+Universal Bash installer for the official **GameMaker Beta** on Linux —  
+auto-downloads, converts, and patches for Fedora, Arch, Ubuntu & more.
+# install-gamemaker
 Run GameMaker Beta natively on any Linux distro — no Flatpak, no container, just pure system magic 😎
 
 # 🧩 GameMaker Beta Linux Installer
