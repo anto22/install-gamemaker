@@ -39,17 +39,10 @@ sleep 0.5
 fetch_latest() {
     echo "→ Checking for the latest GameMaker Beta build..." >&2
 
-    LATEST_FILE=$(curl -s -A "Mozilla/5.0" "$BASE_URL" \
+    curl -s -A "Mozilla/5.0" "$BASE_URL" \
         | grep -oE 'GameMaker-Beta-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.deb' \
         | sort -V \
-        | tail -n 1)
-
-    if [ -z "$LATEST_FILE" ]; then
-        echo "⚠️ Could not detect version, using fallback..." >&2
-        LATEST_FILE="GameMaker-Beta-2024.1400.5.1052.deb"
-    fi
-
-    echo "$LATEST_FILE"
+        | tail -n 1
 }
 
 # ────────────────────────────────────────────────────────────────
