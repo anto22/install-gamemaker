@@ -39,12 +39,12 @@ echo "→ Detected system: ${DISTRO^} ($ARCH)"
 sleep 0.5
 
 # ─────────────────────────────────────────────
-# 🔎 Récupération version (fragile → fallback)
+# 🔎 Détection version (optionnelle)
 fetch_latest() {
     curl -s -A "Mozilla/5.0" "$BASE_URL" \
         | grep -oE 'GameMaker-Beta-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.deb' \
         | sort -V \
-        | tail -n 1
+        | tail -n 1 || true
 }
 
 LATEST_FILE="$(fetch_latest)"
@@ -61,7 +61,7 @@ echo "→ Selected version: $LATEST_FILE"
 echo "→ Download URL: $LATEST_URL"
 
 # ─────────────────────────────────────────────
-# 🌐 Download
+# 🌐 Download (FIX: curl au lieu de wget)
 download_package() {
     rm -rf "$TMP_DIR"
     mkdir -p "$TMP_DIR"
@@ -69,25 +69,19 @@ download_package() {
 
     echo "→ Downloading..."
 
-    if ! wget -q --show-progress "$LATEST_URL" -O "$PKG_NAME"; then
-        echo "❌ Download failed."
-
-        echo
-        echo "💡 Possible reasons:"
-        echo "- URL outdated"
-        echo "- Remote server changed"
-        echo "- Access requires authentication"
+    if ! curl -L --progress-bar -A "Mozilla/5.0" "$LATEST_URL" -o "$PKG_NAME"; then
+        echo "❌ Download failed (server / URL issue, not your internet)."
         echo
 
-        read -p "👉 Enter a valid .deb URL manually (or Ctrl+C to cancel): " MANUAL_URL
+        read -p "👉 Enter a valid .deb URL manually: " MANUAL_URL
 
         if [ -z "$MANUAL_URL" ]; then
             echo "❌ No URL provided. Aborting."
             exit 1
         fi
 
-        wget "$MANUAL_URL" -O "$PKG_NAME" || {
-            echo "❌ Manual download also failed."
+        curl -L "$MANUAL_URL" -o "$PKG_NAME" || {
+            echo "❌ Manual download failed."
             exit 1
         }
     fi
@@ -125,7 +119,7 @@ extract_manual() {
 }
 
 # ─────────────────────────────────────────────
-# 🧱 Install
+# 🧱 Installation
 install_gamemaker() {
     echo "→ Installing..."
 
@@ -156,7 +150,7 @@ install_gamemaker() {
 }
 
 # ─────────────────────────────────────────────
-# 🧩 Fixes
+# 🧩 Fixes runtime
 apply_fixes() {
     echo "→ Applying fixes..."
 
@@ -175,11 +169,11 @@ apply_fixes() {
 }
 
 # ─────────────────────────────────────────────
-# 🚀 Run
+# 🚀 Exécution
 download_package
 install_tools
 install_gamemaker
 apply_fixes
 
 echo
-echo "✅ GameMaker installed successfully!"
+echo "✅ GameMaker Beta installation complete!"
