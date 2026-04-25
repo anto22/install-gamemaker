@@ -167,7 +167,18 @@ apply_fixes() {
         sudo ln -sf /usr/lib64/libfreetype.so.6 "$FT_VENDOR/freetype.so"
     fi
 }
+create_launcher() {
+    echo "→ Creating desktop entry..."
 
+    sudo tee /usr/share/applications/gamemaker-beta.desktop > /dev/null <<EOF
+[Desktop Entry]
+Name=GameMaker Beta
+Exec=/opt/GameMaker-Beta/GameMaker
+Icon=/opt/GameMaker-Beta/Assets/Linux/icon.png
+Type=Application
+Categories=Development;
+EOF
+}
 # ─────────────────────────────────────────────
 # 🚀 Exécution
 download_package
