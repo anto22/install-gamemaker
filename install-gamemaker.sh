@@ -37,18 +37,20 @@ sleep 0.5
 # ────────────────────────────────────────────────────────────────
 # 🧭 Find latest GameMaker Beta dynamically
 fetch_latest() {
-    echo "→ Checking for the latest GameMaker Beta build..."
-    LATEST_FILE=$(curl -s "$BASE_URL" | grep -Eo 'GameMaker-Beta-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.deb' | sort -V | tail -n 1)
+    echo "→ Checking for the latest GameMaker Beta build..." >&2
+
+    LATEST_FILE=$(curl -s -A "Mozilla/5.0" "$BASE_URL" \
+        | grep -oE 'GameMaker-Beta-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.deb' \
+        | sort -V \
+        | tail -n 1)
+
     if [ -z "$LATEST_FILE" ]; then
-        echo "⚠️ Could not detect version, using fallback 2024.1400.0.911"
+        echo "⚠️ Could not detect version, using fallback..." >&2
         LATEST_FILE="GameMaker-Beta-2024.1400.5.1052.deb"
     fi
+
     echo "$LATEST_FILE"
 }
-
-LATEST_FILE=$(fetch_latest)
-LATEST_URL="${BASE_URL}${LATEST_FILE}"
-echo "→ Latest version detected: $LATEST_FILE"
 
 # ────────────────────────────────────────────────────────────────
 # 🌐 Download latest package
